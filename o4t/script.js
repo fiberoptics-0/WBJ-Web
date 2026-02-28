@@ -26,32 +26,32 @@ function parseJwt(token) {
 
 async function generateContents() {
     refreshTokens();
-    results = document.getElementById('results');
+    let results = document.getElementById('results');
     results.innerHTML = '';
-    query = document.getElementById('query').value;
-    item_id = 0;
-    buy_amount = 0;
-    sell_amount = 0
-    buy_price = 0;
-    sell_price = Infinity;
+    let query = document.getElementById('query').value;
+    let item_id = 0;
+    let buy_amount = 0;
+    let sell_amount = 0
+    let buy_price = 0;
+    let sell_price = Infinity;
+    let item_response = await fetch('https://esi.evetech.net/universe/ids',{
+        method: 'POST',
+        body: JSON.stringify([query])
+    })
+    let item_data = await item_response.json();
+    if (!item_data.inventory_types) {
+        results.innerHTML = '未找到物品';
+        return;
+    } else {
+        item_id = item_data.inventory_types[0].id;
+    }
     let response = await fetch('https://esi.evetech.net/markets/structures/'+structure_id, {
         headers: {
             'Authorization': 'Bearer ' + tokens[0]
         }
     })
     data = await response.json();
-    console.log(data.length)
     for (let i = 0; i < data.length; i++) {
-        console.log(i);
-        console.log(item_id);
-        if (item_id == 0) {
-            let item_response = await fetch('https://esi.evetech.net/universe/types/' + data[i].type_id)
-            let item_data = await item_response.json();
-            if (item_data.name == query) {
-                item_id = data[i].type_id;
-            }
-            else continue;
-        }
         if (data[i].type_id == item_id) {
             if (data[i].is_buy_order) {
                 buy_amount += data[i].volume_remain;
@@ -63,11 +63,15 @@ async function generateContents() {
             }
         }
     }
-    if (item_id == 0) {
-        results.innerHTML = '未找到物品';
+    if (sell_amount == 0) {
+        results.innerHTML += '当前无卖单<br>';
+    } else {
+        results.innerHTML += '卖单数量：' + sell_amount + '<br>卖单价格：' + sell_price + ' isk<br>';
     }
-    else {
-        results.innerHTML = '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk' + '<br>卖单数量：' + sell_amount + '<br>卖单价格：' + sell_price + ' isk';
+    if (buy_amount == 0) {
+        results.innerHTML += '当前无买单<br>';
+    } else {
+        results.innerHTML += '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk';
     }
 }
 
