@@ -13,7 +13,8 @@
     <?php include '../header.php'; ?>
     <div class="content-page">
         <input type="text" id="query" placeholder="输入物品名称">
-        <button id="search-button">搜索</button>
+        <button id="search-button" onclick="generateContents()">搜索</button>
+        <div id="results"></div>
     </div>
 </body>
 

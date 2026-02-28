@@ -1,4 +1,5 @@
 const secret = "eat_FIEV2cgtj3Lf7wygUIdsJfl0xgsn4Ht0_2n9UpH"
+const structure_id = 1040804972352
 let tokens = new Array();
 let refresh_tokens = new Array();
 let running = false;
@@ -13,54 +14,6 @@ function remove_account(i) {
     localStorage.removeItem(account_count - 1);
 }
 
-async function drawTable(orders, name, i) {
-    let div = document.createElement('div');
-    div.className = 'content-page';
-    div.style.textAlign = 'center';
-    let h2 = document.createElement('h2');
-    h2.innerText = name;
-    div.appendChild(h2);
-    let table = document.createElement('table');
-    let thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>物品</th><th>收单/卖单</th><th>价格</th><th>剩余量</th><th>星区</th><th>军团订单</th></tr>';
-    table.appendChild(thead);
-    let tbody = document.createElement('tbody');
-    for (let order of orders) {
-        let response = await fetch('https://esi.evetech.net/universe/names', {
-            method: 'POST',
-            headers: {
-                'Accept-Language': 'zh',
-                'Content-Type': 'application/json'
-            },
-            body: '[' + order.type_id + ',' + order.region_id + ']'
-        })
-        let names = await response.json();
-        let tr = document.createElement('tr');
-        let td1 = document.createElement('td');
-        td1.innerText = names[0].name;
-        let td2 = document.createElement('td');
-        td2.innerText = order.is_buy_order ? '收单' : '卖单';
-        let td3 = document.createElement('td');
-        td3.innerText = order.price + ' isk';
-        let td4 = document.createElement('td');
-        td4.innerText = order.volume_remain + '/' + order.volume_total;
-        let td5 = document.createElement('td');
-        td5.innerText = names[1].name;
-        let td6 = document.createElement('td');
-        td6.innerText = order.is_corporation ? '军团' : '非军团';
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);
-        tr.appendChild(td5);
-        tr.appendChild(td6);
-        tbody.appendChild(tr);
-    }
-    table.appendChild(tbody);
-    div.appendChild(table);
-    document.body.appendChild(div);
-}
-
 function parseJwt(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -72,7 +25,45 @@ function parseJwt(token) {
 }
 
 async function generateContents() {
-
+    refreshTokens();
+    results = document.getElementById('results');
+    results.innerHTML = '';
+    query = document.getElementById('query').value;
+    item_id = 0;
+    buy_amount, sell_amount, buy_price = 0;
+    sell_price = Infinity;
+    let response = await fetch('https://esi.evetech.net/markets/structures/'+structure_id, {
+        headers: {
+            'Authorization': 'Bearer ' + tokens[0]
+        }
+    })
+    data = await response.json();
+    for (let i = 0; i < data.length; i++) {
+        if (item_id == 0) {
+            let item_response = await fetch('https://esi.evetech.net/universe/types/' + data[i].type_id)
+            let item_data = await item_response.json();
+            if (item_data.name == query) {
+                item_id = data[i].type_id;
+            }
+            else continue;
+        }
+        if (data[i].type_id == item_id) {
+            if (data[i].is_buy_order) {
+                buy_amount += data[i].volume_remain;
+                buy_price = Math.max(buy_price, data[i].price);
+            }
+            else {
+                sell_amount += data[i].volume_remain;
+                sell_price = Math.min(sell_price, data[i].price);
+            }
+        }
+    }
+    if (item_id == 0) {
+        results.innerHTML = '未找到物品';
+    }
+    else {
+        results.innerHTML = '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk' + '<br>卖单数量：' + sell_amount + '<br>卖单价格：' + sell_price + ' isk';
+    }
 }
 
 async function refreshToken(i) {
