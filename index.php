@@ -32,7 +32,7 @@
         <div id="accounts">
             <h2>已登录人物（点击以退出登录）<h2>
         </div>
-        <input style="transform: scale(0.6); align-self: center" type="image" src="login.png" onclick="window.location.href=createAuthorizationUrl()">
+        <input style="transform: scale(0.6); align-self: center" type="image" src="media/login.png" onclick="window.location.href=createAuthorizationUrl()">
     </div>
 </body>
 
