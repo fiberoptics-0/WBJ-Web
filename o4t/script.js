@@ -42,8 +42,10 @@ async function generateContents() {
         body: JSON.stringify([query])
     })
     let item_data = await item_response.json();
+    let content = '';
     if (!item_data.inventory_types) {
-        results.innerHTML = '未找到物品: ' + query;
+        content += '未找到物品: ' + query;
+        results.innerHTML = content + results.innerHTML;
         return;
     } else {
         item_id = item_data.inventory_types[0].id;
@@ -60,17 +62,18 @@ async function generateContents() {
             }
         }
     }
-    results.innerHTML += '物品名称：' + query + '<br>';
+    content += '物品名称：' + query + '<br>';
     if (sell_amount == 0) {
-        results.innerHTML += '当前无卖单<br>';
+        content += '当前无卖单<br>';
     } else {
-        results.innerHTML += '卖单数量：' + sell_amount + '<br>卖单价格：' + sell_price + ' isk<br>';
+        content += '卖单数量：' + sell_amount + '<br>卖单价格：' + sell_price + ' isk<br>';
     }
     if (buy_amount == 0) {
-        results.innerHTML += '当前无买单<br>';
+        content += '当前无买单<br>';
     } else {
-        results.innerHTML += '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk<br>';
+        content += '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk<br>';
     }
+    results.innerHTML = content + results.innerHTML;
 }
 
 async function initialize() {
