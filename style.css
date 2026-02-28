@@ -1,0 +1,115 @@
+.login-page{
+    position: relative;
+    text-align: center;
+    width: 20%;
+    margin-right: 5%;
+}
+.header{
+    width: 90%;
+    height: 80px;
+    position: fixed;
+    margin-left: 5%;
+    top: 0;
+    color: white;
+    z-index: 2;
+}
+.header-title{
+    font-weight: bold;
+}
+.content-page{
+    padding: 20px;
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+.article-page{
+    position: relative;
+    width: 67.5%;
+    margin-left: 5%;
+    margin-right: 2.5%;
+}
+.tab-label{
+    margin-top: 10px;
+}
+.dropdown-tabs{
+    margin-top: 80px;
+    width: 90%;
+    height: 50px;
+    position: fixed;
+    top: 0;
+    background-color: black;
+    color: white;
+    display: flex;
+    border-radius: 10px;
+    margin-left: 5%;
+    z-index: 1;
+}
+.dropdown-contents{
+    width: 90%;
+    margin-top: 130px;
+    position: fixed;
+    margin-left: 5%;
+    z-index: 1;
+    top: 0;
+    color: white;
+    display: flex;
+}
+.dropdown-content{
+    width: 12.5%;
+    text-align: center;
+    background-color: black;
+    border-radius: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+}
+.dropdown-tab{
+    border-radius: 10px;
+    width: 12.5%;
+    text-align: center;
+}
+.dropdown-tab:hover, .dropdown-selection:hover, .article:hover, .account:hover{
+    background-color: grey;
+    cursor: pointer;
+}
+.article{
+    border-radius: 10px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    text-align: left;
+    margin-bottom: 20px;
+}
+#accounts{
+    text-align: center;
+    background-color: black;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td{
+    border: 1px solid white;
+    padding: 8px;
+    text-align: center;
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+body{
+    background-image: url('background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    padding-top: 150px;
+}
