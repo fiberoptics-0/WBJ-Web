@@ -6,6 +6,7 @@ let running = false;
 let expire_times = new Array();
 let running_times = new Array();
 let account_count = 0;
+let market_data = [];
 
 function remove_account(i) {
     for (let j = i; j < account_count - 1; j++) {
@@ -28,6 +29,9 @@ async function generateContents() {
     refreshTokens();
     let results = document.getElementById('results');
     results.innerHTML = '';
+    if(market_data.length == 0) {
+        await initialize();
+    }
     let query = document.getElementById('query').value;
     let item_id = 0;
     let buy_amount = 0;
@@ -46,30 +50,18 @@ async function generateContents() {
     } else {
         item_id = item_data.inventory_types[0].id;
     }
-    while (true) {
-        let response = await fetch('https://esi.evetech.net/markets/structures/' + structure_id + '?page=' + page, {
-            headers: {
-                'Authorization': 'Bearer ' + tokens[0]
-            }
-        })
-        data = await response.json();
-        if (data.error) {
-            break;
-        }
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].type_id == item_id) {
-                if (data[i].is_buy_order) {
-                    buy_amount += data[i].volume_remain;
-                    buy_price = Math.max(buy_price, data[i].price);
+    for (let i = 0; i < market_data.length; i++) {
+            if (market_data[i].type_id == item_id) {
+                if (market_data[i].is_buy_order) {
+                    buy_amount += market_data[i].volume_remain;
+                    buy_price = Math.max(buy_price, market_data[i].price);
                 }
                 else {
-                    sell_amount += data[i].volume_remain;
-                    sell_price = Math.min(sell_price, data[i].price);
+                    sell_amount += market_data[i].volume_remain;
+                    sell_price = Math.min(sell_price, market_data[i].price);
                 }
             }
         }
-        page++;
-    }
     if (sell_amount == 0) {
         results.innerHTML += '当前无卖单<br>';
     } else {
@@ -79,6 +71,22 @@ async function generateContents() {
         results.innerHTML += '当前无买单<br>';
     } else {
         results.innerHTML += '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk';
+    }
+}
+
+async function initialize() {
+    while (true) {
+        let response = await fetch('https://esi.evetech.net/markets/structures/' + structure_id + '?page=' + page, {
+            headers: {
+                'Authorization': 'Bearer ' + tokens[0]
+            }
+        })
+        let data = await response.json();
+        if (data.error) {
+            break;
+        }
+        page++;
+        market_data=market_data.concat(data);
     }
 }
 

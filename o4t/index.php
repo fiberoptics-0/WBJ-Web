@@ -12,6 +12,7 @@
 <body>
     <?php include '../header.php'; ?>
     <div class="content-page">
+        <h3>该页面仅在重新加载时重置数据，如需更新市场数据请刷新页面</h3>
         <input type="text" id="query" placeholder="输入物品名称">
         <button id="search-button" onclick="generateContents()">搜索</button>
         <div id="results"></div>
