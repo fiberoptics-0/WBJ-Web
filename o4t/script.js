@@ -37,7 +37,6 @@ async function generateContents() {
     let buy_amount = 0;
     let sell_amount = 0
     let buy_price = 0;
-    let page = 1;
     let sell_price = Infinity;
     let item_response = await fetch('https://esi.evetech.net/universe/ids', {
         method: 'POST',
@@ -75,6 +74,7 @@ async function generateContents() {
 }
 
 async function initialize() {
+    let page = 1;
     while (true) {
         let response = await fetch('https://esi.evetech.net/markets/structures/' + structure_id + '?page=' + page, {
             headers: {
