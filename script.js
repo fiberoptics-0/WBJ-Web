@@ -83,7 +83,7 @@ function generateRandomStateString(length) {
 redirectUri = 'https://wbj-eve.com';
 clientId = '22b40fe6d6da40ae92575a2703b492b5'
 
-scope = "esi-markets.read_character_orders.v1 esi-contracts.read_character_contracts.v1"
+scope = "esi-markets.read_character_orders.v1 esi-contracts.read_character_contracts.v1 esi-markets.structure_markets.v1"
 
 function createAuthorizationUrl() {
     const state = generateRandomStateString(16);
