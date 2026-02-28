@@ -1,1 +1,1 @@
-<?php echo getenv('CLIENT_SECRET') ?>
+<?php echo $_SERVER['EVE_CLIENT_SECRET'] ?>
