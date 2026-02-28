@@ -28,8 +28,7 @@ function parseJwt(token) {
 async function generateContents() {
     refreshTokens();
     let results = document.getElementById('results');
-    results.innerHTML = '';
-    if(market_data.length == 0) {
+    if (market_data.length == 0) {
         await initialize();
     }
     let query = document.getElementById('query').value;
@@ -44,23 +43,24 @@ async function generateContents() {
     })
     let item_data = await item_response.json();
     if (!item_data.inventory_types) {
-        results.innerHTML = '未找到物品';
+        results.innerHTML = '未找到物品: ' + query;
         return;
     } else {
         item_id = item_data.inventory_types[0].id;
     }
     for (let i = 0; i < market_data.length; i++) {
-            if (market_data[i].type_id == item_id) {
-                if (market_data[i].is_buy_order) {
-                    buy_amount += market_data[i].volume_remain;
-                    buy_price = Math.max(buy_price, market_data[i].price);
-                }
-                else {
-                    sell_amount += market_data[i].volume_remain;
-                    sell_price = Math.min(sell_price, market_data[i].price);
-                }
+        if (market_data[i].type_id == item_id) {
+            if (market_data[i].is_buy_order) {
+                buy_amount += market_data[i].volume_remain;
+                buy_price = Math.max(buy_price, market_data[i].price);
+            }
+            else {
+                sell_amount += market_data[i].volume_remain;
+                sell_price = Math.min(sell_price, market_data[i].price);
             }
         }
+    }
+    results.innerHTML += '物品名称：' + query + '<br>';
     if (sell_amount == 0) {
         results.innerHTML += '当前无卖单<br>';
     } else {
@@ -69,7 +69,7 @@ async function generateContents() {
     if (buy_amount == 0) {
         results.innerHTML += '当前无买单<br>';
     } else {
-        results.innerHTML += '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk';
+        results.innerHTML += '买单数量：' + buy_amount + '<br>买单价格：' + buy_price + ' isk<br>';
     }
 }
 
@@ -86,7 +86,7 @@ async function initialize() {
         }
         let data = await response.json();
         page++;
-        market_data=market_data.concat(data);
+        market_data = market_data.concat(data);
     }
 }
 
