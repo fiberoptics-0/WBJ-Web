@@ -42,6 +42,7 @@ async function generateContents() {
     data = await response.json();
     for (let i = 0; i < data.length; i++) {
         console.log(i);
+        console.log(item_id);
         if (item_id == 0) {
             let item_response = await fetch('https://esi.evetech.net/universe/types/' + data[i].type_id)
             let item_data = await item_response.json();
