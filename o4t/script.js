@@ -33,8 +33,9 @@ async function generateContents() {
     let buy_amount = 0;
     let sell_amount = 0
     let buy_price = 0;
+    let page = 1;
     let sell_price = Infinity;
-    let item_response = await fetch('https://esi.evetech.net/universe/ids',{
+    let item_response = await fetch('https://esi.evetech.net/universe/ids', {
         method: 'POST',
         body: JSON.stringify([query])
     })
@@ -45,23 +46,29 @@ async function generateContents() {
     } else {
         item_id = item_data.inventory_types[0].id;
     }
-    let response = await fetch('https://esi.evetech.net/markets/structures/'+structure_id, {
-        headers: {
-            'Authorization': 'Bearer ' + tokens[0]
-        }
-    })
-    data = await response.json();
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].type_id == item_id) {
-            if (data[i].is_buy_order) {
-                buy_amount += data[i].volume_remain;
-                buy_price = Math.max(buy_price, data[i].price);
+    while (true) {
+        let response = await fetch('https://esi.evetech.net/markets/structures/' + structure_id + '?page=' + page, {
+            headers: {
+                'Authorization': 'Bearer ' + tokens[0]
             }
-            else {
-                sell_amount += data[i].volume_remain;
-                sell_price = Math.min(sell_price, data[i].price);
+        })
+        data = await response.json();
+        if (data.error) {
+            break;
+        }
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].type_id == item_id) {
+                if (data[i].is_buy_order) {
+                    buy_amount += data[i].volume_remain;
+                    buy_price = Math.max(buy_price, data[i].price);
+                }
+                else {
+                    sell_amount += data[i].volume_remain;
+                    sell_price = Math.min(sell_price, data[i].price);
+                }
             }
         }
+        page++;
     }
     if (sell_amount == 0) {
         results.innerHTML += '当前无卖单<br>';
@@ -89,7 +96,7 @@ async function refreshToken(i) {
         })
     })
     data = await response.json();
-    if(data.error) {
+    if (data.error) {
         remove_account(i);
         window.location.reload();
     }
