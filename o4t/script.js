@@ -44,7 +44,7 @@ async function generateContents() {
     let item_data = await item_response.json();
     let content = '';
     if (!item_data.inventory_types) {
-        content += '未找到物品: ' + query;
+        content += '未找到物品: ' + query + '<br>';
         results.innerHTML = content + results.innerHTML;
         return;
     } else {
