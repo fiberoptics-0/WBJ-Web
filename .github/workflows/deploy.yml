@@ -15,7 +15,7 @@ jobs:
         with:
           switches: -vzrt --delete --exclude='.git*' --exclude='.vscode'
           path: ./
-          remote_path: /var/www/html/
+          remote_path: /var/www/
           remote_host: ${{ secrets.SERVER_IP }}
           remote_user: ${{ secrets.SERVER_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
