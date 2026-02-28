@@ -38,5 +38,6 @@
     <div class="dropdown-content" id="content-3">
         <h2 class="dropdown-selection" onclick="window.location.href='/market'">订单监测</h2>
         <h2 class="dropdown-selection" onclick="window.location.href='/contracts'">合同监测</h2>
+        <h2 class="dropdown-selection" onclick="window.location.href='/o4t'">市场监测</h2>
     </div>
 </div>
