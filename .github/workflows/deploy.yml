@@ -13,7 +13,7 @@ jobs:
       - name: Deploy via Rsync
         uses: Burnett01/rsync-deployments@7.0.1
         with:
-          switches: -vzrt --delete --exclude-from='.rsync-exclude'
+          switches: -vzrt --delete --exclude-from='.rsyncignore'
           path: ./
           remote_path: /var/www/
           remote_host: ${{ secrets.SERVER_IP }}
