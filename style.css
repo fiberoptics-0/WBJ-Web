@@ -106,7 +106,7 @@ html, body {
     height: 100%;
 }
 body{
-    background-image: url('background.jpg');
+    background-image: url('media/background.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
