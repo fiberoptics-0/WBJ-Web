@@ -30,7 +30,9 @@ async function generateContents() {
     results.innerHTML = '';
     query = document.getElementById('query').value;
     item_id = 0;
-    buy_amount, sell_amount, buy_price = 0;
+    buy_amount = 0;
+    sell_amount = 0
+    buy_price = 0;
     sell_price = Infinity;
     let response = await fetch('https://esi.evetech.net/markets/structures/'+structure_id, {
         headers: {
