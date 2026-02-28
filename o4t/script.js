@@ -40,6 +40,7 @@ async function generateContents() {
         }
     })
     data = await response.json();
+    console.log(data.length)
     for (let i = 0; i < data.length; i++) {
         console.log(i);
         console.log(item_id);
