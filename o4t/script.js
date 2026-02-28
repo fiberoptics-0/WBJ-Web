@@ -81,10 +81,10 @@ async function initialize() {
                 'Authorization': 'Bearer ' + tokens[0]
             }
         })
-        let data = await response.json();
-        if (data.error) {
+        if (response.status != 200) {
             break;
         }
+        let data = await response.json();
         page++;
         market_data=market_data.concat(data);
     }
